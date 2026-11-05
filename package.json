@@ -1,0 +1,20 @@
+{
+  "name": "sard-writer-studio",
+  "version": "1.0.0",
+  "description": "ملاذ كتاب القصص والمحتوى المقروء - بيئة كتابة دافئة وبسيطة",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "writing",
+    "storytelling",
+    "arabic",
+    "minimalist",
+    "zen",
+    "distraction-free",
+    "writer-studio"
+  ],
+  "author": "Sard App",
+  "license": "MIT"
+}

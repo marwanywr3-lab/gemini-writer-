@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="warm">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سَرد | ملاذ كتاب القصص والمحتوى</title>
+  <meta name="description" content="تطبيق كتابة دافئ وبسيط يساعد كتاب القصص والمحتوى المقروء على تنظيم أفكارهم، فصولهم، وشخصياتهم في بيئة هادئة ومحفزة للإبداع.">
+  
+  <!-- خطوط عربية أنيقة من Google Fonts مع بدائل محلية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-warm">
+
+  <!-- شريط التنقل العلوي الرئيسي -->
+  <header class="app-header">
+    <div class="header-right">
+      <button id="toggle-sidebar-btn" class="icon-btn" title="تبديل القائمة الجانبية (Ctrl+B)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <div class="brand">
+        <span class="brand-logo">🖋️</span>
+        <div class="brand-text">
+          <h1 class="brand-title">سَرد</h1>
+          <span class="brand-tagline">ملاذ الكاتب</span>
+        </div>
+      </div>
+      <div class="story-title-container">
+        <input type="text" id="story-title-input" class="story-title-input" value="رواية بلا عنوان" title="انقر لتعديل عنوان العمل">
+      </div>
+    </div>
+
+    <div class="header-left">
+      <!-- زر أصوات التركيز والخلفية الهادئة -->
+      <button id="ambient-audio-btn" class="header-action-btn" title="أصوات الأجواء الدافئة (مطر، موقد، ريح)">
+        <span class="btn-icon">☕</span>
+        <span class="btn-label">أصوات هادئة</span>
+      </button>
+
+      <!-- زر بنك الإلهام -->
+      <button id="sparks-btn" class="header-action-btn" title="شرارة الأفكار وعلاج قفلة الكاتب">
+        <span class="btn-icon">✨</span>
+        <span class="btn-label">شرارة إلهام</span>
+      </button>
+
+      <!-- زر وضع التركيز الخالي من المشتتات -->
+      <button id="zen-mode-btn" class="header-action-btn" title="وضع التركيز النقي الخالي من أي مشتتات (F11)">
+        <span class="btn-icon">🧘‍♂️</span>
+        <span class="btn-label">وضع السكون</span>
+      </button>
+
+      <!-- زر تبديل السمة (دافئ، ليلي، كلاسيكي) -->
+      <div class="theme-selector-wrapper">
+        <button id="theme-btn" class="icon-btn" title="تغيير مظهر الواجهة والألوان">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <div id="theme-dropdown" class="theme-dropdown hidden">
+          <button data-theme="warm" class="theme-opt active"><span class="color-dot warm"></span> ورقي دافئ</button>
+          <button data-theme="sepia" class="theme-opt"><span class="color-dot sepia"></span> حبر وقهوة</button>
+          <button data-theme="night" class="theme-opt"><span class="color-dot night"></span> سكون الليل</button>
+          <button data-theme="minimal" class="theme-opt"><span class="color-dot minimal"></span> ناصع بسيط</button>
+        </div>
+      </div>
+
+      <!-- زر التصدير والمشاركة -->
+      <button id="export-modal-btn" class="action-btn primary" title="تصدير العمل كملف أو طباعة">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        <span>تصدير</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- الحاوية الرئيسية للتطبيق -->
+  <div class="app-layout">
+    
+    <!-- القائمة الجانبية (Sidebar) -->
+    <aside id="app-sidebar" class="app-sidebar">
+      <!-- تبويبات القائمة الجانبية -->
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="chapters">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>الفصول</span>
+        </button>
+        <button class="sidebar-tab" data-tab="characters">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>الشخصيات</span>
+        </button>
+        <button class="sidebar-tab" data-tab="world">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>العوالم والملاحظات</span>
+        </button>
+        <button class="sidebar-tab" data-tab="goals">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span>الأهداف</span>
+        </button>
+      </div>
+
+      <!-- محتويات تبويب الفصول والمشاهد -->
+      <div id="tab-content-chapters" class="tab-pane active">
+        <div class="pane-header">
+          <span class="pane-title">هيكل الرواية والمشاهد</span>
+          <button id="add-chapter-btn" class="small-add-btn" title="إضافة فصل جديد">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <span>فصل جديد</span>
+          </button>
+        </div>
+        <div id="chapters-list" class="chapters-list">
+          <!-- تملأ الفصول ديناميكياً من JavaScript -->
+        </div>
+      </div>
+
+      <!-- محتويات تبويب الشخصيات -->
+      <div id="tab-content-characters" class="tab-pane">
+        <div class="pane-header">
+          <span class="pane-title">سجل الشخصيات (Codex)</span>
+          <button id="add-character-btn" class="small-add-btn" title="إضافة شخصية جديدة">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <span>شخصية</span>
+          </button>
+        </div>
+        <div id="characters-list" class="characters-list">
+          <!-- تملأ الشخصيات ديناميكياً -->
+        </div>
+      </div>
+
+      <!-- محتويات تبويب بناء العوالم والملاحظات -->
+      <div id="tab-content-world" class="tab-pane">
+        <div class="pane-header">
+          <span class="pane-title">الأماكن والحبكة والتفاصيل</span>
+          <button id="add-lore-btn" class="small-add-btn" title="إضافة بطاقة عالم أو مكان">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <span>ملاحظة/مكان</span>
+          </button>
+        </div>
+        <div id="lore-list" class="lore-list">
+          <!-- تملأ الملاحظات ديناميكياً -->
+        </div>
+      </div>
+
+      <!-- محتويات تبويب أهداف الكتابة والإحصائيات -->
+      <div id="tab-content-goals" class="tab-pane">
+        <div class="pane-header">
+          <span class="pane-title">إحصاءات الجلسة والإنجاز</span>
+        </div>
+        <div class="goals-container">
+          <div class="stat-card">
+            <div class="stat-number" id="stats-total-words">0</div>
+            <div class="stat-label">إجمالي كلمات العمل</div>
+          </div>
+          
+          <div class="goal-progress-card">
+            <div class="goal-header">
+              <span class="goal-label">هدف الجلسة اليومي</span>
+              <div class="goal-input-wrap">
+                <input type="number" id="daily-goal-input" value="1000" min="100" step="100">
+                <span>كلمة</span>
+              </div>
+            </div>
+            <div class="progress-bar-bg">
+              <div id="goal-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text" id="goal-progress-text">0 من 1000 كلمة (0%)</div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="mini-stat">
+              <span class="mini-val" id="stats-reading-time">0 د</span>
+              <span class="mini-lbl">زمن القراءة المتوقع</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-val" id="stats-total-chapters">0</span>
+              <span class="mini-lbl">عدد الفصول</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-val" id="stats-total-chars">0</span>
+              <span class="mini-lbl">إجمالي الحروف</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-val" id="stats-session-streak">اليوم 🔥</span>
+              <span class="mini-lbl">استمرارية الكتابة</span>
+            </div>
+          </div>
+
+          <div class="writing-tips-card">
+            <div class="tip-title">💡 ومضة للكاتب</div>
+            <p id="daily-writing-tip" class="tip-body">اكتب المسودة الأولى بحرية وعفوية تامة دون محاكمة للذات؛ التحرير والصقل لهما وقتهما اللاحق.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- تذييل القائمة الجانبية: تحميل نموذج / تفريغ -->
+      <div class="sidebar-footer">
+        <button id="load-sample-btn" class="footer-link-btn" title="تحميل قصة نموذجية جاهزة لتجربة التطبيق">
+          <span>📖 تحميل قصة تجريبية جاهزة</span>
+        </button>
+        <button id="new-project-btn" class="footer-link-btn danger" title="بدء قصة جديدة كلياً">
+          <span>🗑️ مسح والبدء من جديد</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- مساحة التحرير والكتابة المركزية -->
+    <main class="editor-workspace">
+      
+      <!-- شريط أدوات التنسيق العائم / الخفيف -->
+      <div class="editor-toolbar">
+        <div class="toolbar-group">
+          <button type="button" class="tool-btn" data-cmd="bold" title="غامق (Ctrl+B)"><b>ب</b></button>
+          <button type="button" class="tool-btn" data-cmd="italic" title="مائل (Ctrl+I)"><i>م</i></button>
+          <button type="button" class="tool-btn" data-cmd="heading" title="عنوان فرعي">ع٢</button>
+          <button type="button" class="tool-btn" data-cmd="quote" title="اقتباس كلامي أو داخلي">❝</button>
+          <button type="button" class="tool-btn" data-cmd="divider" title="فاصل مشهد زمني (***)">✦✦✦</button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="toolbar-group">
+          <!-- تخصيص الخط والحجم في مساحة الكتابة -->
+          <select id="font-family-select" class="tool-select" title="اختر خط الكتابة المفضل لديك">
+            <option value="amiri">خط أميري (أدبي تقليدي)</option>
+            <option value="alexandria" selected>خط الإسكندرية (معاصر ناعم)</option>
+            <option value="tajawal">خط تجوال (بسيط وعصري)</option>
+            <option value="system">خط النظام التلقائي</option>
+          </select>
+
+          <button id="font-size-dec" class="tool-btn" title="تصغير الخط">أ-</button>
+          <button id="font-size-inc" class="tool-btn" title="تكبير الخط">أ+</button>
+
+          <button id="typewriter-toggle-btn" class="tool-btn" title="وضع الآلة الكاتبة: يجعل السطر النشط دائماً في منتصف الشاشة">
+            <span>📜 آلة كاتبة</span>
+          </button>
+        </div>
+
+        <div class="toolbar-spacer"></div>
+
+        <div class="toolbar-group">
+          <span id="save-status-indicator" class="save-indicator" title="حالة الحفظ">
+            <span class="save-dot"></span>
+            <span class="save-label">تم الحفظ تلقائياً</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- لوح الكتابة والورق -->
+      <div class="writing-canvas-container" id="canvas-container">
+        <div class="writing-paper">
+          <!-- عنوان الفصل الحالي وملاحظته السريعة -->
+          <div class="chapter-header-area">
+            <input type="text" id="current-chapter-title" class="current-chapter-title" placeholder="عنوان الفصل...">
+            <input type="text" id="current-chapter-subtitle" class="current-chapter-subtitle" placeholder="ملاحظة سريعة للمشهد (الزمان، المكان، الدافع)...">
+          </div>
+
+          <!-- مساحة النص القابلة للتحرير -->
+          <div id="story-editor" 
+               class="story-editor font-alexandria" 
+               contenteditable="true" 
+               spellcheck="true" 
+               data-placeholder="ابدأ بنسج خيوط الحكاية هنا... دع الكلمات تتدفق دون قيود.">
+          </div>
+        </div>
+      </div>
+
+      <!-- شريط الحالة السفلي الصغير والمريح -->
+      <footer class="editor-statusbar">
+        <div class="status-item">
+          <span>كلمات الفصل:</span>
+          <strong id="status-chapter-words">0</strong>
+        </div>
+        <div class="status-item">
+          <span>إجمالي الرواية:</span>
+          <strong id="status-total-words">0</strong>
+        </div>
+        <div class="status-item">
+          <span>زمن القراءة:</span>
+          <strong id="status-read-time">أقل من دقيقة</strong>
+        </div>
+        <div class="status-spacer"></div>
+        <div class="status-item quick-shortcuts">
+          <span class="shortcut-badge">Esc: خروج من وضع السكون</span>
+          <span class="shortcut-badge">Ctrl+S: تأكيد الحفظ</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- زر عائم للخروج من وضع السكون Zen Mode -->
+  <button id="exit-zen-btn" class="exit-zen-btn hidden" title="الخروج من وضع التركيز (Esc)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <span>إنهاء السكون</span>
+  </button>
+
+  <!-- نافذة مشغل الأصوات الدافئة (Ambient Audio Drawer/Modal) -->
+  <div id="ambient-modal" class="modal-backdrop hidden">
+    <div class="modal-box ambient-modal-box">
+      <div class="modal-header">
+        <div class="modal-title-with-icon">
+          <span class="modal-icon">☕</span>
+          <h3>الأجواء الدافئة المساعدة على التركيز</h3>
+        </div>
+        <button class="modal-close-btn" data-close="ambient-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="ambient-intro">أصوات هادئة تم توليدها تقنياً عبر متصفحك مباشرة بدون ملفات صوت خارجية ثقيلة، لتهيئة طقس كتابة حميمي وهادئ.</p>
+        
+        <div class="ambient-track">
+          <div class="track-info">
+            <span class="track-icon">🌧️</span>
+            <div class="track-names">
+              <strong>المطر الهادئ</strong>
+              <small>قطرات خفيفة على زجاج النافذة</small>
+            </div>
+            <button class="track-toggle-btn" data-sound="rain">تشغيل</button>
+          </div>
+          <div class="track-volume">
+            <input type="range" min="0" max="100" value="40" data-volume="rain" class="volume-slider">
+          </div>
+        </div>
+
+        <div class="ambient-track">
+          <div class="track-info">
+            <span class="track-icon">🪵</span>
+            <div class="track-names">
+              <strong>دفء الموقد وطقطقة الحطب</strong>
+              <small>دفء الشتاء ولهيب خافت مريح</small>
+            </div>
+            <button class="track-toggle-btn" data-sound="fire">تشغيل</button>
+          </div>
+          <div class="track-volume">
+            <input type="range" min="0" max="100" value="30" data-volume="fire" class="volume-slider">
+          </div>
+        </div>
+
+        <div class="ambient-track">
+          <div class="track-info">
+            <span class="track-icon">🍃</span>
+            <div class="track-names">
+              <strong>همس الرياح الليلية</strong>
+              <small>نسيم عليل يحفز الخيال السردي</small>
+            </div>
+            <button class="track-toggle-btn" data-sound="wind">تشغيل</button>
+          </div>
+          <div class="track-volume">
+            <input type="range" min="0" max="100" value="25" data-volume="wind" class="volume-slider">
+          </div>
+        </div>
+
+        <div class="master-volume-box">
+          <label>مستوى الصوت العام:</label>
+          <input type="range" id="master-volume" min="0" max="100" value="60" class="volume-slider">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة شرارة الإلهام وعلاج قفلة الكاتب (Story Sparks Modal) -->
+  <div id="sparks-modal" class="modal-backdrop hidden">
+    <div class="modal-box sparks-modal-box">
+      <div class="modal-header">
+        <div class="modal-title-with-icon">
+          <span class="modal-icon">✨</span>
+          <h3>مُلهم الأفكار وعلاج قفلة الكاتب</h3>
+        </div>
+        <button class="modal-close-btn" data-close="sparks-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="sparks-categories">
+          <button class="spark-cat-btn active" data-cat="twist">منعطف مفاجئ (Plot Twist)</button>
+          <button class="spark-cat-btn" data-cat="conflict">صراع ومواجهة</button>
+          <button class="spark-cat-btn" data-cat="sensory">تفصيل حسي وبناء مشهد</button>
+          <button class="spark-cat-btn" data-cat="opening">بداية جملة ملهمة</button>
+        </div>
+
+        <div class="spark-card">
+          <div id="spark-quote" class="spark-quote">
+            "في اللحظة التي قرر فيها البطل الرحيل، وجد رسالة مختومة بشمع أحمر قد وُضعت تحت بابه دون صوت..."
+          </div>
+          <button id="new-spark-btn" class="action-btn secondary">
+            <span>🎲 فكرة أخرى جديدة</span>
+          </button>
+          <button id="insert-spark-btn" class="action-btn primary">
+            <span>✍️ إدراج في النص الحالي</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إدارة وتفاصيل الشخصية (Character Modal) -->
+  <div id="character-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="character-modal-title">إضافة شخصية جديدة</h3>
+        <button class="modal-close-btn" data-close="character-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="character-form">
+          <input type="hidden" id="char-id">
+          
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>اسم الشخصية:</label>
+              <input type="text" id="char-name" required placeholder="مثال: يوسف النجدي">
+            </div>
+            <div class="form-group flex-1">
+              <label>الدور في القصة:</label>
+              <select id="char-role">
+                <option value="بطل">بطل القصة (Protagonist)</option>
+                <option value="غريم">الخصم / الغريم (Antagonist)</option>
+                <option value="مساند">شخصية مساندة</option>
+                <option value="ثانوية">شخصية عابرة</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>العمر والمهنة:</label>
+              <input type="text" id="char-age-occupation" placeholder="مثال: ٣٤ عاماً، ساعاتي قديم">
+            </div>
+            <div class="form-group">
+              <label>الدافع أو الرغبة الكبرى:</label>
+              <input type="text" id="char-goal" placeholder="ما الذي يريده بشدة في هذه القصة؟">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>نقطة الضعف أو الصراع الداخلي:</label>
+            <input type="text" id="char-flaw" placeholder="خوف، سر قديم، أو تردد معين...">
+          </div>
+
+          <div class="form-group">
+            <label>المظهر الخارجي وسمات فريدة:</label>
+            <textarea id="char-notes" rows="3" placeholder="طريقة الكلام، علامة فارقة، حركة يد متكررة..."></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="action-btn secondary" data-close="character-modal">إلغاء</button>
+            <button type="submit" class="action-btn primary">حفظ الشخصية</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة بناء العوالم والملاحظات (Lore Modal) -->
+  <div id="lore-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="lore-modal-title">إضافة ملاحظة أو موقع</h3>
+        <button class="modal-close-btn" data-close="lore-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="lore-form">
+          <input type="hidden" id="lore-id">
+          
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label>العنوان:</label>
+              <input type="text" id="lore-title" required placeholder="مثال: مقهى الأزل، قانون السحر الخفي...">
+            </div>
+            <div class="form-group flex-1">
+              <label>التصنيف:</label>
+              <select id="lore-category">
+                <option value="مكان">مكان / موقع</option>
+                <option value="حبكة">خيط حبكة / عقدة</option>
+                <option value="زمن">خط زمني / تاريخ</option>
+                <option value="ملاحظة">فكرة عامة</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>التفاصيل والوصف السردي:</label>
+            <textarea id="lore-desc" rows="4" placeholder="اكتب هنا كل ما يتعلق بهذا المكان أو الفكرة من تفاصيل وأسرار..."></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="action-btn secondary" data-close="lore-modal">إلغاء</button>
+            <button type="submit" class="action-btn primary">حفظ الملاحظة</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة التصدير والنسخ (Export Modal) -->
+  <div id="export-modal" class="modal-backdrop hidden">
+    <div class="modal-box export-modal-box">
+      <div class="modal-header">
+        <div class="modal-title-with-icon">
+          <span class="modal-icon">📦</span>
+          <h3>خيارات التصدير والنسخ الاحتياطي</h3>
+        </div>
+        <button class="modal-close-btn" data-close="export-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="export-intro">عملك الأدبي ملكك بالكامل. يمكنك تصدير الرواية بالكامل بعدة صيغ جاهزة للقراءة والطباعة والنشر.</p>
+
+        <div class="export-cards-grid">
+          <div class="export-card">
+            <div class="export-icon">🖨️</div>
+            <h4>معاينة وطباعة الكتاب</h4>
+            <p>تنسيق كتاب أنيق ونظيف جاهز للحفظ كـ PDF أو للطباعة الورقية مباشرة.</p>
+            <button id="export-print-btn" class="action-btn secondary full-width">معاينة وطباعة</button>
+          </div>
+
+          <div class="export-card">
+            <div class="export-icon">📝</div>
+            <h4>ملف نصي كامل (.txt)</h4>
+            <p>تجميع كل الفصول في ملف نصي نقي قابل للفتح على أي جهاز أو برنامج.</p>
+            <button id="export-txt-btn" class="action-btn secondary full-width">تحميل TXT</button>
+          </div>
+
+          <div class="export-card">
+            <div class="export-icon">📑</div>
+            <h4>ملف ماركداون (.md)</h4>
+            <p>مثالي لكتاب المقالات والناشرين الذين يفضلون تنسيق Markdown مع العناوين.</p>
+            <button id="export-md-btn" class="action-btn secondary full-width">تحميل Markdown</button>
+          </div>
+
+          <div class="export-card">
+            <div class="export-icon">💾</div>
+            <h4>نسخة احتياطية كاملة (.json)</h4>
+            <p>حفظ كل الفصول، الشخصيات، الملاحظات، والأهداف لاسترجاعها في أي وقت.</p>
+            <button id="export-json-btn" class="action-btn primary full-width">تنزيل النسخة الاحتياطية</button>
+          </div>
+        </div>
+
+        <div class="import-section">
+          <h4>استعادة نسخة سابقة:</h4>
+          <input type="file" id="import-json-input" accept=".json" class="file-input">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- منطقة الطباعة السرية (تظهر فقط عند أمر Print) -->
+  <div id="printable-area" class="printable-area hidden"></div>
+
+  <!-- جافاسكريبت التطبيق المنظم -->
+  <script src="js/audio.js"></script>
+  <script src="js/sparks.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/characters.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
